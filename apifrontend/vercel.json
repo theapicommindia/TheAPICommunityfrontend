@@ -1,0 +1,24 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "postmancommunitypune.in"
+        }
+      ],
+      "destination": "https://www.postmancommunitypune.in/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "env": {
+    "VITE_BACKEND_URL": "https://postman-backend-ochre.vercel.app"
+  }
+}
