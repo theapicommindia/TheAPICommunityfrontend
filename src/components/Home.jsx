@@ -19,6 +19,7 @@ import spheron from "../assets/partners/spheron.svg";
 import Email from "./Email";
 import About from "./About";
 import konfhub from '../assets/partners/konfhub.svg'
+import heroIllustration from "../assets/homeImg.svg";
 
 function Home() {
   const partners = [
@@ -69,111 +70,144 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center mt-24">
+
+      {/* ===== HERO SECTION ===== */}
       <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 md:px-6 lg:px-8 max-w-full">
-        <div className="bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center mx-auto max-w-full w-full sm:w-auto">
-          <div className="w-full flex flex-row items-center bg-gray-50 rounded-t-2xl p-2 sm:p-3 mb-1 gap-2 sm:gap-4">
-            <div className="flex flex-row gap-1 sm:gap-2">
-              <div className="h-3 w-3 sm:h-4 sm:w-4 bg-red-600 rounded-full"></div>
-              <div className="h-3 w-3 sm:h-4 sm:w-4 bg-yellow-500 rounded-full"></div>
-              <div className="h-3 w-3 sm:h-4 sm:w-4 bg-green-500 rounded-full"></div>
-            </div>
-            <div className="flex-1 text-black font-bold text-sm sm:text-lg text-center sm:pl-4">
-              <span className="text-orange-600">POSTMAN</span> Community Pune
-            </div>
+        {/* Tagline */}
+        <div className="text-center mb-12">
+          <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-widest uppercase" style={{ color: '#34acb6' }}>
+            Community • Connect • Collaborate
           </div>
+        </div>
 
-          <div className="w-full h-2"></div>
+        {/* Hero content - two column layout */}
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 mb-12 max-w-7xl w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+          {/* Left side - Text content */}
+          <div className="flex flex-col items-center lg:w-1/2">
+            {/* Join Our Community heading */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-orange-500 mb-4 text-center tracking-wide">
+              JOIN OUR COMMUNITY
+            </h1>
 
-          <div className="flex flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4 pt-4 sm:py-2 mb-2 flex-wrap justify-center">
-            <div className="flex flex-row items-center justify-around gap-1 sm:gap-2 border border-black rounded-md px-2 sm:px-4 py-2 font-bold text-black bg-white flex-grow max-w-full sm:max-w-[550px]">
-              <div className="flex items-center gap-1 sm:gap-2 border-r-2 border-gray-200 pr-2">
-                <span className="text-xs sm:text-base">POST</span>
-                <IoIosArrowDown className="h-3 w-3 text-gray-400" />
-              </div>
-              <div className="truncate text-xs sm:text-base text-orange-600">
-                THE API Community Pune
-              </div>
-            </div>
-            <div className="h-8 sm:h-10 sm:w-25 font-semibold flex flex-row items-center justify-around gap-1 sm:gap-2 bg-blue-600 rounded-md cursor-pointer shrink-0 mx-2 sm:mx-0 px-2 sm:px-4 text-white hover:bg-blue-700 transition-colors">
-              <div className="text-xs sm:text-base">Send</div>
-              <IoIosArrowDown className="h-3 w-3 text-white" />
-            </div>
-          </div>
+            {/* Subtitle description */}
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 mb-6 text-center max-w-2xl">
+              A space for developers to collaborate, explore, and shape the future of APIs.
+            </p>
 
-          <div className="w-[650px] sm:max-w-[650px]"></div>
-
-          {/* Table header */}
-          <div className="w-full max-w-full sm:max-w-[600px] flex flex-row text-xs sm:text-sm border border-black px-2 sm:px-4 text-gray-700 rounded-sm mb-2 overflow-x-auto">
-            <div className="w-12 sm:w-10 h-8 border-r border-black shrink-0"></div>
-            <div className="w-36 sm:w-46.5 h-8 border-r border-black pl-1 sm:pl-2 truncate">
-              Key
-            </div>
-            <div className="w-56 sm:w-77 h-8 pl-1 sm:pl-2 border-r border-black truncate">
-              Value
-            </div>
-            <div className="w-24 h-8 text-center flex justify-end gap-1 sm:gap-2 text-gray-400 shrink-0">
-              <BsThreeDots className="h-4 sm:h-5 w-4 sm:w-5" />
-              <span className="hidden sm:inline">Bulk Edit</span>
-            </div>
-          </div>
-
-          {[
-            { key: "Community", value: "POSTMAN Pune" },
-            { key: "Member", value: "2000" },
-            {
-              key: "Focus",
-              value: '["API Development", "Testing", "Collaboration"]',
-            },
-            { key: "Fastest-growing-community", value: "True" },
-            { key: "Join", value: "True" },
-          ].map((row) => (
-            <div
-              key={row.key}
-              className="w-full max-w-full sm:max-w-[600px] flex flex-row border border-black px-2 sm:px-4 mb-2 rounded-sm text-gray-700 text-xs sm:text-sm overflow-x-auto"
+            {/* Learn More button */}
+            <button
+              onClick={() => {
+                const aboutSection = document.querySelector('#about-section');
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform"
             >
-              <div className="w-12 sm:w-10 h-8 border-r border-black shrink-0"></div>
-              <div className="w-36 sm:w-46 border-r border-black text-left text-gray-700 pl-1 sm:pl-2 truncate">
-                {row.key}
-              </div>
-              <div className="w-56 sm:w-76 border-r border-black text-left text-gray-700 pl-1 sm:pl-2 truncate">
-                {row.value}
-              </div>
-              <div className="w-24 h-8 flex justify-end gap-1 sm:gap-2 text-gray-400 shrink-0">
-                <BsThreeDots className="h-4 sm:h-5 w-4 sm:w-5" />
-                <span className="hidden sm:inline">Bulk Edit</span>
-              </div>
-            </div>
-          ))}
+              Learn More
+            </button>
+          </div>
+
+          {/* Right side - Hero illustration */}
+          <div className="lg:w-1/2 w-full max-w-2xl">
+            <img
+              src={heroIllustration}
+              alt="Community collaboration illustration"
+              className="w-full h-auto rounded-2xl shadow-lg"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="relative w-full overflow-hidden bg-orange-500 py-1 sm:py-2 transform rotate-3 my-16">
-        <div className="flex animate-scroll-left gap-6 w-max">
-          {[...Array(8)].map((_, index) => (
-            <div key={index} className="flex items-center gap-1 sm:gap-2">
-              <img
-                className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
-                src={star}
-                alt="Star"
-              />
-              <span className="text-white font-bold text-[10px] sm:text-xs md:text-sm">POSTMAN</span>
-              <img
-                className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
-                src={star}
-                alt="Star"
-              />
-              <span className="text-white font-bold text-[10px] sm:text-xs md:text-sm">COMMUNITY</span>
-              <img
-                className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
-                src={star}
-                alt="Star"
-              />
-              <span className="text-white font-bold text-[10px] sm:text-xs md:text-sm">PUNE</span>
+      {/* ===== SHOWCASE SECTION ===== */}
+      <div className="w-full py-12 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20">
+        <div className="max-w-7xl mx-auto">
+          {/* Horizontal Scroll Container */}
+          <div className="flex overflow-hidden scrollbar-hide pb-2">
+            <div className="flex animate-scroll gap-4">
+              {/* Showcase Cards */}
+              {[...Array(2)].flatMap(() => [
+                {
+                  id: 1,
+                  title: "API Testing Workshop",
+                  image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop&crop=center",
+                  category: "Workshop"
+                },
+                {
+                  id: 2,
+                  title: "REST API Best Practices",
+                  image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&h=200&fit=crop&crop=center",
+                  category: "Tutorial"
+                },
+                {
+                  id: 3,
+                  title: "GraphQL Integration",
+                  image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop&crop=center",
+                  category: "Project"
+                },
+                {
+                  id: 4,
+                  title: "Microservices Architecture",
+                  image: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=300&h=200&fit=crop&crop=center",
+                  category: "Guide"
+                },
+                {
+                  id: 5,
+                  title: "API Security Fundamentals",
+                  image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=300&h=200&fit=crop&crop=center",
+                  category: "Security"
+                },
+                {
+                  id: 6,
+                  title: "Community Hackathon 2024",
+                  image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&h=200&fit=crop&crop=center",
+                  category: "Event"
+                },
+                {
+                  id: 7,
+                  title: "Mobile API Development",
+                  image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=300&h=200&fit=crop&crop=center",
+                  category: "Mobile"
+                },
+                {
+                  id: 8,
+                  title: "API Documentation Guide",
+                  image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=300&h=200&fit=crop&crop=center",
+                  category: "Documentation"
+                }
+              ]).map((item, index) => (
+                <div
+                  key={`${item.id}-${index}`}
+                  className="flex-none w-64 bg-white rounded-lg shadow-sm border border-gray-200 cursor-pointer"
+                >
+                  {/* Card Image */}
+                  <div className="relative">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-40 object-cover rounded-t-lg"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+                        {item.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="p-4">
+                    <h3 className="text-sm font-medium text-gray-900">
+                      {item.title}
+                    </h3>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
+      {/* Partner Section */}
       <div className="w-full mt-10 flex flex-col gap-8 justify-center items-center px-4">
         <div className="overflow-hidden w-full max-w-screen-xl">
           <div className="flex animate-scroll-left gap-6 w-max">
@@ -202,7 +236,9 @@ function Home() {
         </div>
       </div>
 
-      <About />
+      <div id="about-section">
+        <About />
+      </div>
 
       <div className="flex flex-col lg:flex-row items-center justify-center gap-10 px-4 lg:px-10 mt-10 mb-10 max-w-7xl mx-auto">
         <div className="w-full lg:w-3/5">
