@@ -19,6 +19,6 @@
     }
   ],
   "env": {
-    "VITE_BACKEND_URL": "https://postman-backend-ochre.vercel.app"
+    "VITE_BACKEND_URL": "https://the-api-communitybackend.vercel.app"
   }
 }

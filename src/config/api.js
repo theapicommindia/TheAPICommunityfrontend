@@ -3,25 +3,28 @@ import axios from 'axios';
 // Force localhost for development, use env variable for production
 const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5002' : (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5002');
 
+// Ensure API_BASE_URL doesn't end with a slash to prevent double slashes
+const cleanAPI_BASE_URL = API_BASE_URL.replace(/\/$/, '');
+
 // Debug log to see which URL is being used
 console.log('API_BASE_URL:', API_BASE_URL);
 console.log('Environment:', import.meta.env.DEV ? 'development' : 'production');
 
 // Maintain ENDPOINTS for backward compatibility
 export const ENDPOINTS = {
-  SPEAKERS: `${API_BASE_URL}/api/speakers`,  
-  SPONSORS: `${API_BASE_URL}/api/sponsors`,
-  SUBSCRIBE: `${API_BASE_URL}/api/subscribe`,
-  EMAIL: `${API_BASE_URL}/api/email`,
-  EVENTS: `${API_BASE_URL}/api/events`,
-  USERS: `${API_BASE_URL}/api/users`,
-  AUTH: `${API_BASE_URL}/api/auth`,
-  ADMIN_AUTH: `${API_BASE_URL}/api/admin/auth`,
+  SPEAKERS: `${cleanAPI_BASE_URL}/api/speakers`,  
+  SPONSORS: `${cleanAPI_BASE_URL}/api/sponsors`,
+  SUBSCRIBE: `${cleanAPI_BASE_URL}/api/subscribe`,
+  EMAIL: `${cleanAPI_BASE_URL}/api/email`,
+  EVENTS: `${cleanAPI_BASE_URL}/api/events`,
+  USERS: `${cleanAPI_BASE_URL}/api/users`,
+  AUTH: `${cleanAPI_BASE_URL}/api/auth`,
+  ADMIN_AUTH: `${cleanAPI_BASE_URL}/api/admin/auth`,
 };
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: `${cleanAPI_BASE_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -152,7 +155,7 @@ export const authAPI = {
 
 // Export default for backward compatibility
 export default {
-  API_BASE_URL,
+  API_BASE_URL: cleanAPI_BASE_URL,
   ENDPOINTS,
   eventAPI,
   userAPI,
