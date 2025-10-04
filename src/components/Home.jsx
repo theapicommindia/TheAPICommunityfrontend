@@ -81,9 +81,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center mt-24">
-      {/* ===== HERO SECTION ===== */}
       <div className="relative z-10 flex flex-col items-center justify-center px-2 sm:px-4 md:px-6 lg:px-8 max-w-full">
-        {/* Tagline */}
         <div className="text-center mb-12">
           <div
             className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-widest uppercase"
@@ -93,11 +91,8 @@ function Home() {
           </div>
         </div>
 
-        {/* Hero content - two column layout */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 mb-12 max-w-7xl w-full px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20">
-          {/* Left side - Text content */}
           <div className="flex flex-col items-center lg:w-1/2">
-            {/* Join Our Community heading */}
             <h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-center tracking-wide"
               style={{ color: "#3097B8" }}
@@ -105,13 +100,11 @@ function Home() {
               JOIN OUR COMMUNITY
             </h1>
 
-            {/* Subtitle description */}
             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 mb-6 text-center max-w-2xl">
               A space for developers to collaborate, explore, and shape the
               future of APIs.
             </p>
 
-            {/* Learn More button */}
             <button
               onClick={() => {
                 const aboutSection = document.querySelector("#about-section");
@@ -129,7 +122,6 @@ function Home() {
             </button>
           </div>
 
-          {/* Right side - Hero illustration */}
           <div className="lg:w-1/2 w-full max-w-2xl">
             <div className="relative group w-full h-72 sm:h-80 md:h-96">
               <img
@@ -137,7 +129,6 @@ function Home() {
                 alt="Community collaboration illustration"
                 className="w-full h-full object-cover rounded-2xl shadow-lg transition-all duration-300 group-hover:blur-sm"
               />
-              {/* Optional: Add overlay/button here if needed */}
             </div>
           </div>
         </div>
@@ -252,18 +243,6 @@ function Home() {
       </div>
 
       <div className="w-full mt-10 flex flex-col gap-8 justify-center items-center px-4">
-        <div className="overflow-hidden w-full max-w-screen-xl">
-          <div className="flex animate-scroll-left gap-6 w-max">
-            {[...partners, ...partners].map(({ name, img }, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={name}
-                className="h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 w-auto rounded-xl object-cover flex-shrink-0 p-2"
-              />
-            ))}
-          </div>
-        </div>
 
         <div className="overflow-hidden w-full max-w-screen-xl">
           <div className="flex animate-scroll-right gap-6 w-max">
