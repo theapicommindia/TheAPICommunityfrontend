@@ -134,7 +134,7 @@ function EventDetails() {
               </div>
               <div>
                 <p className="text-sm text-black font-medium">Registrations</p>
-                <p className="font-semibold text-black">{registrations.length} / {event.availableSeats}</p>
+                <p className="font-semibold text-black">{registrations.length}</p>
               </div>
             </div>
           </div>

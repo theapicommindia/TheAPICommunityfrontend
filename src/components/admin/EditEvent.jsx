@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import LocationInput from '../LocationInput';
 
 function EditEvent() {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ function EditEvent() {
     date: new Date(),
     time: "",
     location: "",
-    availableSeats: "",
     image: "",
+    speakers: []
   });
 
   useEffect(() => {
@@ -44,8 +45,8 @@ function EditEvent() {
           date: new Date(event.date),
           time: event.time,
           location: event.location,
-          availableSeats: event.availableSeats,
           image: event.image || "",
+          speakers: event.speakers || []
         });
         setLoading(false);
       } catch (error) {
@@ -95,6 +96,35 @@ function EditEvent() {
     setFormData((prev) => ({
       ...prev,
       time: value,
+    }));
+  };
+
+  const addSpeaker = () => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: [...prev.speakers, {
+        name: '',
+        role: '',
+        bio: '',
+        linkedin: '',
+        image: ''
+      }]
+    }));
+  };
+
+  const removeSpeaker = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: prev.speakers.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateSpeaker = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: prev.speakers.map((speaker, i) => 
+        i === index ? { ...speaker, [field]: value } : speaker
+      )
     }));
   };
 
@@ -221,7 +251,6 @@ function EditEvent() {
                     <CalendarComponent
                       onChange={handleDateChange}
                       value={formData.date}
-                      minDate={new Date()}
                     />
                   </div>
                 )}
@@ -253,35 +282,14 @@ function EditEvent() {
               >
                 Location
               </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                required
+              <LocationInput
                 value={formData.location}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black text-base py-3 px-4"
+                onChange={(value) => setFormData(prev => ({ ...prev, location: value }))}
+                placeholder="Enter event location (e.g., Pune, Maharashtra)"
+                className="mt-1 text-base py-3 px-4"
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="availableSeats"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Available Seats
-              </label>
-              <input
-                type="number"
-                id="availableSeats"
-                name="availableSeats"
-                required
-                min="1"
-                value={formData.availableSeats}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black text-base py-3 px-4"
-              />
-            </div>
 
             <div>
               <label
@@ -313,6 +321,111 @@ function EditEvent() {
                 placeholder="https://example.com/image.jpg"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black text-base py-3 px-4"
               />
+            </div>
+
+            {/* Speakers Section */}
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Event Speakers
+                </label>
+                <button
+                  type="button"
+                  onClick={addSpeaker}
+                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Add Speaker
+                </button>
+              </div>
+              
+              {formData.speakers.map((speaker, index) => (
+                <div key={index} className="border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-sm font-medium text-gray-700">Speaker {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => removeSpeaker(index)}
+                      className="text-red-600 hover:text-red-800 text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Speaker Name
+                      </label>
+                      <input
+                        type="text"
+                        value={speaker.name}
+                        onChange={(e) => updateSpeaker(index, 'name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="Enter speaker name"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Role/Title
+                      </label>
+                      <input
+                        type="text"
+                        value={speaker.role}
+                        onChange={(e) => updateSpeaker(index, 'role', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="e.g., Senior Engineer, CEO"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        LinkedIn Profile
+                      </label>
+                      <input
+                        type="url"
+                        value={speaker.linkedin}
+                        onChange={(e) => updateSpeaker(index, 'linkedin', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="https://linkedin.com/in/username"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Speaker Image URL
+                      </label>
+                      <input
+                        type="url"
+                        value={speaker.image}
+                        onChange={(e) => updateSpeaker(index, 'image', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="https://example.com/speaker-image.jpg"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Bio (Optional)
+                      </label>
+                      <textarea
+                        value={speaker.bio}
+                        onChange={(e) => updateSpeaker(index, 'bio', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="Brief description about the speaker"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              {formData.speakers.length === 0 && (
+                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                  <p className="text-sm">No speakers added yet.</p>
+                  <p className="text-xs mt-1">Click "Add Speaker" to add speakers for this event.</p>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-4">

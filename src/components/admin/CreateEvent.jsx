@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
-import { eventAPI } from '../../config/api';
+import { eventAPI, authAPI } from '../../config/api';
 import { Calendar, Clock, Upload } from 'lucide-react';
 import { format } from 'date-fns';
 import { Calendar as CalendarComponent } from 'react-calendar';
@@ -11,42 +11,57 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/pop
 import { Button } from '../../components/ui/button';
 import { CalendarIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import LocationInput from '../LocationInput';
 
-// Image compression function
+// Optimized image compression function
 const compressImage = (file) => {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-        
-        // Calculate new dimensions while maintaining aspect ratio
-        const maxDimension = 1200; // Max width or height
-        if (width > height && width > maxDimension) {
-          height = Math.round((height * maxDimension) / width);
-          width = maxDimension;
-        } else if (height > maxDimension) {
-          width = Math.round((width * maxDimension) / height);
-          height = maxDimension;
-        }
-        
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        
-        // Convert to JPEG with quality 0.7
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        resolve(compressedDataUrl);
+    // Use requestIdleCallback for better performance
+    const processImage = () => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Calculate new dimensions while maintaining aspect ratio
+          const maxDimension = 800; // Reduced from 1200 for faster processing
+          if (width > height && width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          
+          // Use faster image rendering
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'medium';
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to JPEG with lower quality for faster processing
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = reject;
       };
-      img.onerror = reject;
+      reader.onerror = reject;
     };
-    reader.onerror = reject;
+
+    // Use requestIdleCallback if available, otherwise setTimeout
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(processImage);
+    } else {
+      setTimeout(processImage, 0);
+    }
   });
 };
 
@@ -77,72 +92,101 @@ const CreateEvent = () => {
     date: new Date(),
     time: '',
     location: '',
-    availableSeats: '',
-    image: null
+    image: null,
+    speakers: []
   });
 
-  const handleChange = (e) => {
+  const handleChange = React.useCallback((e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  };
+  }, []);
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = React.useCallback(async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Check file size (limit to 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image size should be less than 5MB');
-        return;
-      }
+    if (!file) return;
 
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please upload an image file');
-        return;
-      }
-
-      try {
-        // Create a temporary URL for preview
-        const previewUrl = URL.createObjectURL(file);
-        setImagePreview(previewUrl);
-        
-        // Compress the image
-        const compressedImage = await compressImage(file);
-        setFormData(prev => ({
-          ...prev,
-          image: compressedImage
-        }));
-      } catch (error) {
-        console.error('Error processing image:', error);
-        toast.error('Error processing image. Please try again.');
-      }
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size should be less than 5MB');
+      return;
     }
-  };
 
-  const handleDateChange = (date) => {
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file');
+      return;
+    }
+
+    try {
+      // Create a temporary URL for preview immediately
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      
+      // Compress the image asynchronously to avoid blocking UI
+      const compressedImage = await compressImage(file);
+      setFormData(prev => ({
+        ...prev,
+        image: compressedImage
+      }));
+    } catch (error) {
+      console.error('Error processing image:', error);
+      toast.error('Error processing image. Please try again.');
+    }
+  }, []);
+
+  const handleDateChange = React.useCallback((date) => {
     setFormData(prev => ({
       ...prev,
       date
     }));
     setShowCalendar(false);
-  };
+  }, []);
 
-  const handleTimeChange = (value) => {
+  const handleTimeChange = React.useCallback((value) => {
     setFormData(prev => ({
       ...prev,
       time: value
     }));
-  };
+  }, []);
+
+  const addSpeaker = React.useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: [...prev.speakers, {
+        name: '',
+        role: '',
+        bio: '',
+        linkedin: '',
+        image: ''
+      }]
+    }));
+  }, []);
+
+  const removeSpeaker = React.useCallback((index) => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: prev.speakers.filter((_, i) => i !== index)
+    }));
+  }, []);
+
+  const updateSpeaker = React.useCallback((index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      speakers: prev.speakers.map((speaker, i) => 
+        i === index ? { ...speaker, [field]: value } : speaker
+      )
+    }));
+  }, []);
 
   const validateForm = () => {
-    if (!formData.title.trim()) {
+    if (!formData.title || !formData.title.trim()) {
       toast.error('Please enter an event title');
       return false;
     }
-    if (!formData.description.trim()) {
+    if (!formData.description || !formData.description.trim()) {
       toast.error('Please enter a short description');
       return false;
     }
@@ -150,12 +194,8 @@ const CreateEvent = () => {
       toast.error('Please select an event time');
       return false;
     }
-    if (!formData.location.trim()) {
+    if (!formData.location || !formData.location.trim()) {
       toast.error('Please enter an event location');
-      return false;
-    }
-    if (!formData.availableSeats || formData.availableSeats < 1) {
-      toast.error('Please enter a valid number of available seats');
       return false;
     }
     return true;
@@ -165,6 +205,29 @@ const CreateEvent = () => {
     e.preventDefault();
     
     if (!validateForm()) {
+      return;
+    }
+
+    // Check if admin token exists
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      toast.error('Please login as admin first');
+      navigate('/admin/login');
+      return;
+    }
+
+    console.log('Admin token exists:', !!token);
+    console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'No token');
+
+    // Verify token is still valid
+    try {
+      await authAPI.verifyToken();
+      console.log('Token is valid');
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      toast.error('Session expired. Please login again.');
+      localStorage.removeItem('adminToken');
+      navigate('/admin/login');
       return;
     }
 
@@ -179,11 +242,12 @@ const CreateEvent = () => {
         date: formData.date.toISOString(),
         time: formData.time,
         location: formData.location,
-        availableSeats: parseInt(formData.availableSeats),
-        image: formData.image
+        image: formData.image,
+        speakers: formData.speakers
       };
 
       console.log('Submitting event data:', eventData);
+      console.log('Form data:', formData);
 
       const response = await eventAPI.createEvent(eventData);
       
@@ -222,7 +286,18 @@ const CreateEvent = () => {
     <div className="min-h-screen bg-gray-100 text-black py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Event</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Create New Event</h2>
+            <button
+              onClick={() => {
+                localStorage.removeItem('adminToken');
+                navigate('/admin/login');
+              }}
+              className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -278,7 +353,7 @@ const CreateEvent = () => {
                   <input
                     type="text"
                     value={format(formData.date, 'PPP')}
-                    onClick={() => setShowCalendar(true)}
+                    onClick={React.useCallback(() => setShowCalendar(true), [])}
                     readOnly
                     className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -289,7 +364,6 @@ const CreateEvent = () => {
                     <CalendarComponent
                       onChange={handleDateChange}
                       value={formData.date}
-                      minDate={new Date()}
                     />
                   </div>
                 )}
@@ -318,32 +392,14 @@ const CreateEvent = () => {
               <label htmlFor="location" className="block text-sm font-medium text-gray-700">
                 Location
               </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                required
+              <LocationInput
                 value={formData.location}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black text-base py-3 px-4"
+                onChange={(value) => setFormData(prev => ({ ...prev, location: value }))}
+                placeholder="Enter event location (e.g., Pune, Maharashtra)"
+                className="mt-1 text-base py-3 px-4"
               />
             </div>
 
-            <div>
-              <label htmlFor="availableSeats" className="block text-sm font-medium text-gray-700">
-                Available Seats
-              </label>
-              <input
-                type="number"
-                id="availableSeats"
-                name="availableSeats"
-                required
-                min="1"
-                value={formData.availableSeats}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black text-base py-3 px-4"
-              />
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -388,10 +444,115 @@ const CreateEvent = () => {
               )}
             </div>
 
+            {/* Speakers Section */}
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Event Speakers
+                </label>
+                <button
+                  type="button"
+                  onClick={addSpeaker}
+                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Add Speaker
+                </button>
+              </div>
+              
+              {formData.speakers.map((speaker, index) => (
+                <div key={index} className="border border-gray-300 rounded-lg p-4 mb-4 bg-gray-50">
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-sm font-medium text-gray-700">Speaker {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => removeSpeaker(index)}
+                      className="text-red-600 hover:text-red-800 text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Speaker Name
+                      </label>
+                      <input
+                        type="text"
+                        value={speaker.name}
+                        onChange={(e) => updateSpeaker(index, 'name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="Enter speaker name"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Role/Title
+                      </label>
+                      <input
+                        type="text"
+                        value={speaker.role}
+                        onChange={(e) => updateSpeaker(index, 'role', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="e.g., Senior Engineer, CEO"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        LinkedIn Profile
+                      </label>
+                      <input
+                        type="url"
+                        value={speaker.linkedin}
+                        onChange={(e) => updateSpeaker(index, 'linkedin', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="https://linkedin.com/in/username"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Speaker Image URL
+                      </label>
+                      <input
+                        type="url"
+                        value={speaker.image}
+                        onChange={(e) => updateSpeaker(index, 'image', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="https://example.com/speaker-image.jpg"
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Bio (Optional)
+                      </label>
+                      <textarea
+                        value={speaker.bio}
+                        onChange={(e) => updateSpeaker(index, 'bio', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-black focus:ring-black"
+                        placeholder="Brief description about the speaker"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              {formData.speakers.length === 0 && (
+                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg">
+                  <p className="text-sm">No speakers added yet.</p>
+                  <p className="text-xs mt-1">Click "Add Speaker" to add speakers for this event.</p>
+                </div>
+              )}
+            </div>
+
             <div className="flex justify-end gap-4">
               <button
                 type="button"
-                onClick={() => navigate('/admin')}
+                onClick={React.useCallback(() => navigate('/admin'), [navigate])}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Cancel

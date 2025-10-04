@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CalendarDays, TicketMinus, MapPin } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { eventAPI } from "../config/api";
 import { toast } from "sonner";
 import memory from "../assets/event/memory.jpg";
@@ -128,12 +128,6 @@ function Event() {
                         <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0" />
                         <h2 className="text-xs sm:text-sm text-black">
                           {event.time}
-                        </h2>
-                      </div>
-                      <div className="flex flex-row gap-2 items-center w-full sm:w-auto">
-                        <TicketMinus className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0" />
-                        <h2 className="text-xs sm:text-sm text-black">
-                          {event.availableSeats} seats available
                         </h2>
                       </div>
                       <div className="flex flex-row gap-2 items-center w-full sm:w-auto">

@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5002';
+// Force localhost for development, use env variable for production
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5002' : (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5002');
+
+// Debug log to see which URL is being used
+console.log('API_BASE_URL:', API_BASE_URL);
+console.log('Environment:', import.meta.env.DEV ? 'development' : 'production');
 
 // Maintain ENDPOINTS for backward compatibility
 export const ENDPOINTS = {
@@ -59,7 +64,7 @@ export const eventAPI = {
 
   createEvent: async (eventData) => {
     try {
-      const response = await api.post('/events/create', eventData);
+      const response = await api.post('/admin/events/create', eventData);
       return response.data;
     } catch (error) {
       console.error('Error creating event:', error);
@@ -72,7 +77,7 @@ export const eventAPI = {
 
   updateEvent: async (id, eventData) => {
     try {
-      const response = await api.put(`/events/${id}`, eventData);
+      const response = await api.put(`/admin/events/${id}`, eventData);
       return response.data;
     } catch (error) {
       console.error('Error updating event:', error);
@@ -82,7 +87,7 @@ export const eventAPI = {
 
   deleteEvent: async (id) => {
     try {
-      const response = await api.delete(`/events/${id}`);
+      const response = await api.delete(`/admin/events/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error deleting event:', error);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import { Calendar, Clock, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
 
 const EventCard = ({ event }) => {
@@ -40,10 +40,6 @@ const EventCard = ({ event }) => {
             <span className="line-clamp-1">{event.location}</span>
           </div>
           
-          <div className="flex items-center text-gray-600">
-            <Users className="w-4 h-4 mr-2" />
-            <span>{event.availableSeats} seats available</span>
-          </div>
         </div>
         
         <Link

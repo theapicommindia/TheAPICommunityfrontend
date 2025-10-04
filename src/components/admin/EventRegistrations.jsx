@@ -168,9 +168,6 @@ function EventRegistrations() {
               <p className="text-gray-600 mb-2">
                 Date: {format(new Date(event.date), 'PPP')}
               </p>
-              <p className="text-gray-600">
-                Available Seats: {event.availableSeats}
-              </p>
             </div>
           ))
         )}

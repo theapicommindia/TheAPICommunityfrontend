@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarDays, Clock, MapPin, Users, Trash2, Eye, Edit } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Trash2, Eye, Edit } from "lucide-react";
 import { eventAPI } from '../../config/api';
 import { toast } from "sonner";
 import {
@@ -129,10 +129,6 @@ function ManageEvents() {
                     <div className="flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-gray-500" />
                       <span className="text-sm text-gray-600">{event.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-5 h-5 text-gray-500" />
-                      <span className="text-sm text-gray-600">{event.availableSeats} seats</span>
                     </div>
                   </div>
                 </div>

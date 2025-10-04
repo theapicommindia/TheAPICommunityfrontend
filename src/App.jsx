@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 import GridBackground from './components/GridBackground';
 import Event from './components/Event.jsx';
 import About from './components/About';
-import SponsorForm from './components/APIConf2025/SponsorForm';
 import { Toaster } from "sonner";
 import EventDetails from './components/EventDetails';
 import AdminDashboard from './components/admin/AdminDashboard';
@@ -16,12 +15,6 @@ import CreateEvent from './components/admin/CreateEvent';
 import EditEvent from './components/admin/EditEvent';
 import AdminLogin from './components/admin/AdminLogin';
 import SubscribeForm from './components/SubscribeForm';
-import APIConfHome from './components/APIConf2025/APIConfHome';
-import APIConfSpeakers from './components/APIConf2025/APIConfSpeakers';
-import APIConfSponsors from './components/APIConf2025/APIConfSponsors';
-import APIConfTeam from './components/APIConf2025/APIConfTeam';
-import APIConfFAQ from './components/APIConf2025/APIConfFAQ';
-import APIConfAgenda from './components/APIConf2025/APIConfAgenda';
 
 // Admin route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -59,7 +52,6 @@ function App() {
           <Route path="/event" element={<Event />} />
           <Route path="/event/:eventId" element={<EventDetails />} />
           <Route path="/aboutus" element={<About />} />
-          <Route path="/sponsor" element={<SponsorForm />} />
 
           {/* APIConf 2025 Pages */}
           {/* <Route path="/APIconf2025" element={<APIConfHome />} /> */}
