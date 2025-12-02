@@ -93,7 +93,7 @@ const teamLeads = [
   {
     id: 12,
     name: "Sakshi Sonawane",
-    role: "Media Co-Lead",
+    role: "Media Lead",
     bio: "Hi there! I'm Sakshi, a passionate Data Science and Machine Learning enthusiast specialising in developing Python-based solutions to solve complex problems. With hands-on experience in building AI chatbots and creating robust ML pipelines, I am proficient in SQL and Power BI for data analysis and visualisation. I am actively seeking opportunities in Data Analytics and AI to apply my skills and contribute to innovative projects. Let's connect and drive data-driven success together!",
     linkedin: "https://www.linkedin.com/in/sakshi-s-284233206/",
     image: sakshiSonawne,
@@ -101,7 +101,7 @@ const teamLeads = [
   {
     id: 13,
     name: "Saloni Pawar",
-    role: "Designer",
+    role: "Design Lead",
     bio: "I'm Saloni Pawar  an engineer who traded circuits for creativity. While my degree says engineering, my passion drives storytelling, design, and digital strategy. I bring ideas to life as a social media, content creator, and graphic designer, crafting digital experiences that make people stop, think, and connect. I thrive at the intersection of creativity and strategy shaping brand presence, curating stories that resonate, and designing visuals that speak with clarity and style. Currently, I'm working with the API Community a vibrant hub of innovators, developers, and API enthusiasts where technology meets creativity and community.",
     linkedin: "http://linkedin.com/in/saloni-pawar-949aa1178",
     image: saloni,
