@@ -67,7 +67,7 @@ const teamLeads = [
     image: ritika,
   },
   {
-    id: 9,
+    id: 5,
     name: "Eric Fernandes",
     role: "Support Lead",
     bio: "Eric Fernandes is a Graduate Engineer Trainee at iTech Robotics & Automation, working on robotics programming and computer vision. Alongside this, he serves as Community Support Manager at the API Community, where he contributes to community growth, developer support, and technical advocacy. Passionate about AI, automation, and open-source, Eric is building a career at the intersection of technology",
@@ -75,7 +75,7 @@ const teamLeads = [
     image: eric,
   },
   {
-    id: 10,
+    id: 6,
     name: "Asmita Khuspe",
     role: "Anchors Lead",
     bio: "I'm a passionate technologist with a strong foundation in C, C++, Java, and Python, and a growing expertise in cloud technologies like AWS, GCP, Azure, DevOps, and system administration. I enjoy solving complex problems, exploring new tools, and bringing efficiency to the projects I work on. Currently preparing to pursue an MS in Cloud Computing abroad, I'm eager to deepen my knowledge and contribute meaningfully to the evolving tech landscape. Beyond coding, I love mentoring, public speaking, and guiding aspiring professionals, as I believe sharing knowledge is just as important as gaining it. At heart, I'm curious, collaborative, and always open to learning.",
@@ -83,7 +83,7 @@ const teamLeads = [
     image: asmita,
   },
   {
-    id: 11,
+    id: 7,
     name: "Roheeni Naraynkar",
     role: " Anchors Lead",
     bio: "I'm Roheeni, currently a Full-Time Technology Analyst at Citi Bank and proud Citi Bridge Grad'24. I have held diverse roles such as Mentor, PR, Developer, and Editor in clubs like Vinidra Satellite Club and Kshitij during my college years. My internship experience spans Reknot Solution, Citi Bank, and a research role at my college. Alongside my career, I'm active in both social and tech volunteering initiatives, serving as an anchor for the API Community and volunteering at Bhumi.",
@@ -91,7 +91,7 @@ const teamLeads = [
     image: roheeni,
   },
   {
-    id: 12,
+    id: 8,
     name: "Sakshi Sonawane",
     role: "Media Lead",
     bio: "Hi there! I'm Sakshi, a passionate Data Science and Machine Learning enthusiast specialising in developing Python-based solutions to solve complex problems. With hands-on experience in building AI chatbots and creating robust ML pipelines, I am proficient in SQL and Power BI for data analysis and visualisation. I am actively seeking opportunities in Data Analytics and AI to apply my skills and contribute to innovative projects. Let's connect and drive data-driven success together!",
@@ -99,7 +99,7 @@ const teamLeads = [
     image: sakshiSonawne,
   },
   {
-    id: 13,
+    id: 9,
     name: "Saloni Pawar",
     role: "Design Lead",
     bio: "I'm Saloni Pawar  an engineer who traded circuits for creativity. While my degree says engineering, my passion drives storytelling, design, and digital strategy. I bring ideas to life as a social media, content creator, and graphic designer, crafting digital experiences that make people stop, think, and connect. I thrive at the intersection of creativity and strategy shaping brand presence, curating stories that resonate, and designing visuals that speak with clarity and style. Currently, I'm working with the API Community a vibrant hub of innovators, developers, and API enthusiasts where technology meets creativity and community.",
